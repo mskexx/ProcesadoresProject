@@ -83,18 +83,18 @@ expr    : ID   '=' expr { emit(dup); emit2(istore, $1->localvar); }
         | expr '|' expr { /* TODO: TO BE COMPLETED */ error("| operator not implemented"); }
         | expr '^' expr { /* TODO: TO BE COMPLETED */ error("^ operator not implemented"); }
         | expr '&' expr { /* TODO: TO BE COMPLETED */ error("& operator not implemented"); }
-        | expr EQ  expr { /* TODO: TO BE COMPLETED */ error("== operator not implemented"); }
-        | expr NE  expr { /* TODO: TO BE COMPLETED */ error("!= operator not implemented"); }
-        | expr '<' expr { /* TODO: TO BE COMPLETED */ error("< operator not implemented"); }
-        | expr '>' expr { /* TODO: TO BE COMPLETED */ error("> operator not implemented"); }
-        | expr LE  expr { /* TODO: TO BE COMPLETED */ error("<= operator not implemented"); }
-        | expr GE  expr { /* TODO: TO BE COMPLETED */ error(">= operator not implemented"); }
+        | expr EQ  expr { emit3(if_icmpeq, 8); emit2(bipush, 0); emit3(goto_, 5); emit2(bipush,1); }
+        | expr NE  expr { emit3(if_icmpne, 8); emit2(bipush, 0); emit3(goto_, 5); emit2(bipush,1); }
+        | expr '<' expr { emit3(if_icmplt, 8); emit2(bipush, 0); emit3(goto_, 5); emit2(bipush,1); }
+        | expr '>' expr { emit3(if_icmpgt, 8); emit2(bipush, 0); emit3(goto_, 5); emit2(bipush,1); }
+        | expr LE  expr { emit3(if_icmple, 8); emit2(bipush, 0); emit3(goto_, 5); emit2(bipush,1); }
+        | expr GE  expr { emit3(if_icmpge, 8); emit2(bipush, 0); emit3(goto_, 5); emit2(bipush,1); }
         | expr LS  expr { /* TODO: TO BE COMPLETED */ error("<< operator not implemented"); }
         | expr RS  expr { /* TODO: TO BE COMPLETED */ error(">> operator not implemented"); }
-        | expr '+' expr { /* TODO: TO BE COMPLETED */ error("+ operator not implemented"); }
-        | expr '-' expr { /* TODO: TO BE COMPLETED */ error("- operator not implemented"); }
-        | expr '*' expr { /* TODO: TO BE COMPLETED */ error("* operator not implemented"); }
-        | expr '/' expr { /* TODO: TO BE COMPLETED */ error("/ operator not implemented"); }
+        | expr '+' expr { emit(iadd); }
+        | expr '-' expr { emit(isub); }
+        | expr '*' expr { emit(imul); }
+        | expr '/' expr { emit(idiv); }
         | expr '%' expr { /* TODO: TO BE COMPLETED */ error("% operator not implemented"); }
         | '!' expr      { /* TODO: TO BE COMPLETED */ error("! operator not implemented"); }
         | '~' expr      { /* TODO: TO BE COMPLETED */ error("~ operator not implemented"); }

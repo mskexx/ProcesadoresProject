@@ -1586,37 +1586,37 @@ yyreduce:
 
   case 31:
 #line 86 "mycc.y" /* yacc.c:1646  */
-    { /* TODO: TO BE COMPLETED */ error("== operator not implemented"); }
+    { emit3(if_icmpeq, 8); emit2(bipush, 0); emit3(goto_, 5); emit2(bipush,1); }
 #line 1591 "mycc.c" /* yacc.c:1646  */
     break;
 
   case 32:
 #line 87 "mycc.y" /* yacc.c:1646  */
-    { /* TODO: TO BE COMPLETED */ error("!= operator not implemented"); }
+    { emit3(if_icmpne, 8); emit2(bipush, 0); emit3(goto_, 5); emit2(bipush,1); }
 #line 1597 "mycc.c" /* yacc.c:1646  */
     break;
 
   case 33:
 #line 88 "mycc.y" /* yacc.c:1646  */
-    { /* TODO: TO BE COMPLETED */ error("< operator not implemented"); }
+    { emit3(if_icmplt, 8); emit2(bipush, 0); emit3(goto_, 5); emit2(bipush,1); }
 #line 1603 "mycc.c" /* yacc.c:1646  */
     break;
 
   case 34:
 #line 89 "mycc.y" /* yacc.c:1646  */
-    { /* TODO: TO BE COMPLETED */ error("> operator not implemented"); }
+    { emit3(if_icmpgt, 8); emit2(bipush, 0); emit3(goto_, 5); emit2(bipush,1); }
 #line 1609 "mycc.c" /* yacc.c:1646  */
     break;
 
   case 35:
 #line 90 "mycc.y" /* yacc.c:1646  */
-    { /* TODO: TO BE COMPLETED */ error("<= operator not implemented"); }
+    { emit3(if_icmple, 8); emit2(bipush, 0); emit3(goto_, 5); emit2(bipush,1); }
 #line 1615 "mycc.c" /* yacc.c:1646  */
     break;
 
   case 36:
 #line 91 "mycc.y" /* yacc.c:1646  */
-    { /* TODO: TO BE COMPLETED */ error(">= operator not implemented"); }
+    { emit3(if_icmpge, 8); emit2(bipush, 0); emit3(goto_, 5); emit2(bipush,1); }
 #line 1621 "mycc.c" /* yacc.c:1646  */
     break;
 
@@ -1634,25 +1634,25 @@ yyreduce:
 
   case 39:
 #line 94 "mycc.y" /* yacc.c:1646  */
-    { /* TODO: TO BE COMPLETED */ error("+ operator not implemented"); }
+    { emit(iadd); }
 #line 1639 "mycc.c" /* yacc.c:1646  */
     break;
 
   case 40:
 #line 95 "mycc.y" /* yacc.c:1646  */
-    { /* TODO: TO BE COMPLETED */ error("- operator not implemented"); }
+    { emit(isub); }
 #line 1645 "mycc.c" /* yacc.c:1646  */
     break;
 
   case 41:
 #line 96 "mycc.y" /* yacc.c:1646  */
-    { /* TODO: TO BE COMPLETED */ error("* operator not implemented"); }
+    { emit(imul); }
 #line 1651 "mycc.c" /* yacc.c:1646  */
     break;
 
   case 42:
 #line 97 "mycc.y" /* yacc.c:1646  */
-    { /* TODO: TO BE COMPLETED */ error("/ operator not implemented"); }
+    { emit(idiv); }
 #line 1657 "mycc.c" /* yacc.c:1646  */
     break;
 
