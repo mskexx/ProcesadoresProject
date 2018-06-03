@@ -4,7 +4,7 @@
  *  Operations on Java ClassFile struct
  *  
  *
- *  Created by Robert van Engelen on 1/2/05.
+ *  Created by Robert van Engelen on 1/2/05, updated 11/22/13.
  *  Copyright 2005 Robert van Engelen. All rights reserved.
  *
  */
@@ -20,6 +20,7 @@ static int save_attributes(FILE *fd, struct ClassFile *cf);
 static int save_Utf8_info(FILE *fd, const char *name);
 static int save_Integer_info(FILE *fd, u4 i);
 static int save_Float_info(FILE *fd, float f);
+static int save_String_info(FILE *fd, u2 i);
 static int save_Class_info(FILE *fd, u2 name_index);
 static int save_Fieldref_info(FILE *fd, struct Pair p);
 static int save_Methodref_info(FILE *fd, struct Pair p);
@@ -119,6 +120,32 @@ int constant_pool_add_Float(struct ClassFile *cf, float f)
 	{
 		(*p)->tag = CONSTANT_Float;
 		(*p)->data.f = f;
+		(*p)->next = NULL;
+	}
+	
+	return ++cf->constant_pool_count;
+}
+
+// Add a string to the constant pool referenced by constant pool index (to UTF8)
+int constant_pool_add_String(struct ClassFile *cf, u2 i)
+{
+	struct ConstantPool **p = &cf->constant_pool;
+	int index = 1;
+
+	while (*p != NULL)
+	{
+		if ((*p)->tag == CONSTANT_String && (*p)->data.i != i)
+			return index;
+		p = &(*p)->next;
+		index++;
+	}
+
+	*p = (struct ConstantPool*)malloc(sizeof(struct ConstantPool));
+
+	if (*p)
+	{
+		(*p)->tag = CONSTANT_String;
+		(*p)->data.i = i;
 		(*p)->next = NULL;
 	}
 	
@@ -303,7 +330,9 @@ static int save_constant_pool(FILE *fd, struct ClassFile *cf)
 			case CONSTANT_Class:
 				save_Class_info(fd, p->data.r);
 				break;
-			// case CONSTANT String:
+			case CONSTANT_String:
+				save_String_info(fd, p->data.i);
+				break;
 			case CONSTANT_Fieldref:
 				save_Fieldref_info(fd, p->data.t);
 				break;
@@ -339,8 +368,8 @@ static int save_constant_pool(FILE *fd, struct ClassFile *cf)
 
 static int save_interfaces(FILE *fd, struct ClassFile *cf)
 {
-	// Not used at this time
 	(void)cf; // appease -Wall -Wextra
+	// Not used at this time
 	save_u2(fd, 0);				// interfaces_count
 	// Each (u2) value in the interfaces array must be a valid index into the constant_pool table.
 	// u2(...)
@@ -402,7 +431,7 @@ static int save_methods(FILE *fd, struct ClassFile *cf)
 static int save_attributes(FILE *fd, struct ClassFile *cf)
 {
 	(void)cf; // appease -Wall -Wextra
- 	save_u2(fd, 0);				// attributes_count
+	save_u2(fd, 0);				// attributes_count
 	// Each value of the attributes table must be an attribute structure.
 
 	return 0;
@@ -431,6 +460,14 @@ static int save_Float_info(FILE *fd, float f)
 	save_u1(fd, CONSTANT_Float);
 	save_u4(fd, i);
 
+	return 0;
+}
+
+static int save_String_info(FILE *fd, u2 i)
+{
+	save_u1(fd, CONSTANT_String);
+	save_u2(fd, i);
+	
 	return 0;
 }
 

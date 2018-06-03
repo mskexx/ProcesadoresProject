@@ -1,13 +1,13 @@
-/* test the use of 'break' (when implemented for bonus points) */
-k = 22;
-j = 1;
-while (j < 1000)
+// test variable as a boolean value (requires conversion to short circuit code)
+main()
 {
-   k = k + j;
-   if (k > 1000)
-      break;
-   k = k + 10;
-   j = j << 1;
-}
-return k;
+   int n, m;
 
+   n = $0;
+   m = $1;
+
+   if (n && m > 0) // converts n to short-circuit
+     return 1;
+   else
+     return 0;
+}

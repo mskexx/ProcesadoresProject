@@ -1,1 +1,2 @@
-return 123;
+main()
+{ return $0; }

@@ -9,11 +9,16 @@ struct Keyword
 static struct Keyword keywords[] =
 {
 	{ "break",	BREAK },
+	{ "char",	CHAR },
 	{ "do",		DO },
 	{ "else",	ELSE },
+	{ "float",	FLOAT },
 	{ "for",	FOR },
 	{ "if",		IF },
+	{ "int",	INT },
+	{ "main",	MAIN },
 	{ "return",	RETURN },
+	{ "void",	VOID },
 	{ "while",	WHILE },
 	{ NULL,         0 }
 };

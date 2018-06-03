@@ -40,7 +40,7 @@ Type mkfloat()
 Type mkret(Type type)
 { char *s;
   if (type)
-  { s = strrchr(type, ')');
+  { strcpy(s,strrchr(type, ')'));
     if (s)
       return s + 1;
   }

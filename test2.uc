@@ -1,1 +1,6 @@
-return $0 + $1;
+//IGNORE
+main()
+{ int n;
+  n = $0;
+  return n;
+}

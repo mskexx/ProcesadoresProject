@@ -1,10 +1,12 @@
-/* test the use of 'break' (when implemented for bonus points) */
-k = 22;
-for (j = 0; j < 100; j += 1)
+// test local/global vars with type coercion
+int n;
+main()
 {
-   k = k + j;
-   if (k > 120) 
-      break;
-   k = k + 10;
+  float p, m;
+  p = 1.2;
+  n = p;	// local float to global int
+  m = n;	// global int to local float
+  m = 1.0 + m;
+  n = m;
+  return n;
 }
-return k;

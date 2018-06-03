@@ -52,33 +52,38 @@ extern int yydebug;
     FLT = 262,
     STR = 263,
     BREAK = 264,
-    DO = 265,
-    ELSE = 266,
-    FOR = 267,
-    IF = 268,
-    RETURN = 269,
-    WHILE = 270,
-    PA = 271,
-    NA = 272,
-    TA = 273,
-    DA = 274,
-    MA = 275,
-    AA = 276,
-    XA = 277,
-    OA = 278,
-    LA = 279,
-    RA = 280,
-    OR = 281,
-    AN = 282,
-    EQ = 283,
-    NE = 284,
-    LE = 285,
-    GE = 286,
-    LS = 287,
-    RS = 288,
-    AR = 289,
-    PP = 290,
-    NN = 291
+    CHAR = 265,
+    DO = 266,
+    ELSE = 267,
+    FLOAT = 268,
+    FOR = 269,
+    IF = 270,
+    INT = 271,
+    MAIN = 272,
+    RETURN = 273,
+    VOID = 274,
+    WHILE = 275,
+    PA = 276,
+    NA = 277,
+    TA = 278,
+    DA = 279,
+    MA = 280,
+    AA = 281,
+    XA = 282,
+    OA = 283,
+    LA = 284,
+    RA = 285,
+    OR = 286,
+    AN = 287,
+    EQ = 288,
+    NE = 289,
+    LE = 290,
+    GE = 291,
+    LS = 292,
+    RS = 293,
+    PP = 294,
+    NN = 295,
+    AR = 296
   };
 #endif
 /* Tokens.  */
@@ -89,47 +94,53 @@ extern int yydebug;
 #define FLT 262
 #define STR 263
 #define BREAK 264
-#define DO 265
-#define ELSE 266
-#define FOR 267
-#define IF 268
-#define RETURN 269
-#define WHILE 270
-#define PA 271
-#define NA 272
-#define TA 273
-#define DA 274
-#define MA 275
-#define AA 276
-#define XA 277
-#define OA 278
-#define LA 279
-#define RA 280
-#define OR 281
-#define AN 282
-#define EQ 283
-#define NE 284
-#define LE 285
-#define GE 286
-#define LS 287
-#define RS 288
-#define AR 289
-#define PP 290
-#define NN 291
+#define CHAR 265
+#define DO 266
+#define ELSE 267
+#define FLOAT 268
+#define FOR 269
+#define IF 270
+#define INT 271
+#define MAIN 272
+#define RETURN 273
+#define VOID 274
+#define WHILE 275
+#define PA 276
+#define NA 277
+#define TA 278
+#define DA 279
+#define MA 280
+#define AA 281
+#define XA 282
+#define OA 283
+#define LA 284
+#define RA 285
+#define OR 286
+#define AN 287
+#define EQ 288
+#define NE 289
+#define LE 290
+#define GE 291
+#define LS 292
+#define RS 293
+#define PP 294
+#define NN 295
+#define AR 296
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 13 "mycc.y" /* yacc.c:1909  */
+#line 36 "mycc.y" /* yacc.c:1909  */
  Symbol *sym;  /* token value yylval.sym is the symbol table entry of an ID */
   unsigned num; /* token value yylval.num is the value of an int constant */
   float flt;    /* token value yylval.flt is the value of a float constant */
   char *str;    /* token value yylval.str is the value of a string constant */
   unsigned loc; /* location of instruction to backpatch */
+  Type typ;	/* type descriptor */
 
-#line 133 "mycc.h" /* yacc.c:1909  */
+#line 144 "mycc.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

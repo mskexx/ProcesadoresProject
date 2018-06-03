@@ -1,13 +1,9 @@
-// GCD
-
-a = $0;
-b = $1;
-
-while (b != 0)
-{
-  t = b;
-  b = a % b;
-  a = t;
+// test global variables and functions
+int counter;
+int add(int val)
+{ return counter += val;
 }
-
-return a;
+main()
+{ add(2);
+  return add(-1);
+}

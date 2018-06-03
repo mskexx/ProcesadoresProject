@@ -1,2 +1,3 @@
-n=$0;
-return n;
+main()
+{ return $0;
+}

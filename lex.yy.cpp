@@ -24,7 +24,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #define INITIAL (0)
-#define YY_NUM_RULES (31)
+#define YY_NUM_RULES (37)
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -80,22 +80,22 @@ class yyFlexLexer : public FlexLexer {
 ////////////////////////////////////////////////////////////////////////////////
 
 #line 1 "mycc.l"
-/* TODO: TO BE COMPLETED */
+/* TO BE COMPLETED */
 
 #line 7 "mycc.l"
-
 
 #include "global.h"
 #include "mycc.h"
 
-static int localvar = 3;	/* JVM first local var index */
+static int localvar = 3;
 
 static int install_id();
 static int install_int();
 static int install_oct();
 static int install_hex();
 static int install_chr();
-
+static int install_fp();
+static int install_str();
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -134,7 +134,7 @@ YY_EXTERN_C int yylex(void)
 
 int yyFlexLexer::yylex()
 {
-  static const reflex::Pattern PATTERN_INITIAL("(?m)([\\x09-\\x0d\\x20])|(return)|((?:(?:[A-Z_a-z])(?:(?:[A-Z_a-z])|(?:[0-9]))*))|((?:(?:[0-9])+))|((?:\\Q+=\\E))|((?:\\Q-=\\E))|((?:\\Q*=\\E))|((?:\\Q/=\\E))|((?:\\Q%=\\E))|((?:\\Q&=\\E))|((?:\\Q^=\\E))|((?:\\Q|=\\E))|((?:\\Q<<=\\E))|((?:\\Q>>=\\E))|((?:\\Q||\\E))|((?:\\Q&&\\E))|((?:\\Q==\\E))|((?:\\Q!=\\E))|((?:\\Q<=\\E))|((?:\\Q>=\\E))|((?:\\Q<<\\E))|((?:\\Q>>\\E))|((?:\\Q++\\E))|((?:\\Q--\\E))|((?:\\Q->\\E))|((?:\\Q<%\\E))|((?:\\Q%>\\E))|((?:\\Q<:\\E))|((?:\\Q:>\\E))|([!$-&(-/:-?\\x5b\\x5d\\x5e{-~])|(.)");
+  static const reflex::Pattern PATTERN_INITIAL("(?m)([\\x09-\\x0d\\x20])|((?:\\Q//\\E).*(?:[\\x0a\\x0d])+)|((?:\\Q/*\\E).*.(?:\\Q*/\\E))|((?:(?:[A-Z_a-z])(?:(?:[A-Z_a-z])|(?:[0-9]))*))|((?:0[0-7]+))|((?:0[Xx][0-9A-Fa-f]+))|((?:(?:[0-9])+))|((?:'(?:\\\\'|[^\\x0a'])*'))|((?:(?:(?:[0-9])+)(?:\\.(?:(?:[0-9])+)(?:[Ee][\\x2b\\x2d]?(?:(?:[0-9])+))?|(?:\\.(?:(?:[0-9])+))?[Ee][\\x2b\\x2d]?(?:(?:[0-9])+))))|((?:\"(?:\\\\\"|\\\\\\n|[^\"])*\"))|((?:\\Q+=\\E))|((?:\\Q-=\\E))|((?:\\Q*=\\E))|((?:\\Q/=\\E))|((?:\\Q%=\\E))|((?:\\Q&=\\E))|((?:\\Q^=\\E))|((?:\\Q|=\\E))|((?:\\Q<<=\\E))|((?:\\Q>>=\\E))|((?:\\Q||\\E))|((?:\\Q&&\\E))|((?:\\Q==\\E))|((?:\\Q!=\\E))|((?:\\Q<=\\E))|((?:\\Q>=\\E))|((?:\\Q<<\\E))|((?:\\Q>>\\E))|((?:\\Q++\\E))|((?:\\Q--\\E))|((?:\\Q->\\E))|((?:\\Q<%\\E))|((?:\\Q%>\\E))|((?:\\Q<:\\E))|((?:\\Q:>\\E))|([!$-&(-/:-?\\x5b\\x5d\\x5e{-~])|(.)");
   if (!has_matcher())
   {
     matcher(new Matcher(PATTERN_INITIAL, stdinit(), this));
@@ -154,159 +154,188 @@ int yyFlexLexer::yylex()
               output(matcher().input());
             }
             YY_BREAK
-          case 1: // rule at line 29: [\x09-\x0d\x20]
-            YY_USER_ACTION
-#line 29 "mycc.l"
-/* skip white space */
-            YY_BREAK
-          case 2: // rule at line 30: return
-            YY_USER_ACTION
-#line 30 "mycc.l"
-{ return RETURN; }
-            YY_BREAK
-          case 3: // rule at line 31: (?:(?:[A-Z_a-z])(?:(?:[A-Z_a-z])|(?:[0-9]))*)
-            YY_USER_ACTION
-#line 31 "mycc.l"
-{ return install_id(); }
-            YY_BREAK
-          case 4: // rule at line 32: (?:(?:[0-9])+)
-            YY_USER_ACTION
-#line 32 "mycc.l"
-{ return install_int(); }
-            YY_BREAK
-          case 5: // rule at line 33: (?:\Q+=\E)
-            YY_USER_ACTION
-#line 33 "mycc.l"
-{ return PA; }
-            YY_BREAK
-          case 6: // rule at line 34: (?:\Q-=\E)
+          case 1: // rule at line 34: [\x09-\x0d\x20]
             YY_USER_ACTION
 #line 34 "mycc.l"
-{ return NA; }
+/* skip white space */
             YY_BREAK
-          case 7: // rule at line 35: (?:\Q*=\E)
+          case 2: // rule at line 35: (?:\Q//\E).*(?:[\x0a\x0d])+
             YY_USER_ACTION
 #line 35 "mycc.l"
-{ return TA; }
             YY_BREAK
-          case 8: // rule at line 36: (?:\Q/=\E)
+          case 3: // rule at line 36: (?:\Q/*\E).*.(?:\Q*/\E)
             YY_USER_ACTION
 #line 36 "mycc.l"
-{ return DA; }
+{}      /* TO BE COMPLETED: ignore inline and multiline comments */
             YY_BREAK
-          case 9: // rule at line 37: (?:\Q%=\E)
+          case 4: // rule at line 37: (?:(?:[A-Z_a-z])(?:(?:[A-Z_a-z])|(?:[0-9]))*)
             YY_USER_ACTION
 #line 37 "mycc.l"
-{ return MA; }
+{ return install_id(); }
             YY_BREAK
-          case 10: // rule at line 38: (?:\Q&=\E)
+          case 5: // rule at line 38: (?:0[0-7]+)
             YY_USER_ACTION
 #line 38 "mycc.l"
-{ return AA; }
+{ return install_oct(); }
             YY_BREAK
-          case 11: // rule at line 39: (?:\Q^=\E)
+          case 6: // rule at line 39: (?:0[Xx][0-9A-Fa-f]+)
             YY_USER_ACTION
 #line 39 "mycc.l"
-{ return XA; }
+{ return install_hex(); }
             YY_BREAK
-          case 12: // rule at line 40: (?:\Q|=\E)
+          case 7: // rule at line 40: (?:(?:[0-9])+)
             YY_USER_ACTION
 #line 40 "mycc.l"
-{ return OA; }
+{ return install_int(); }
             YY_BREAK
-          case 13: // rule at line 41: (?:\Q<<=\E)
+          case 8: // rule at line 41: (?:'(?:\\'|[^\x0a'])*')
             YY_USER_ACTION
 #line 41 "mycc.l"
-{ return LA; }
+{ return install_chr(); }
             YY_BREAK
-          case 14: // rule at line 42: (?:\Q>>=\E)
+          case 9: // rule at line 42: (?:(?:(?:[0-9])+)(?:\.(?:(?:[0-9])+)(?:[Ee][\x2b\x2d]?(?:(?:[0-9])+))?|(?:\.(?:(?:[0-9])+))?[Ee][\x2b\x2d]?(?:(?:[0-9])+)))
             YY_USER_ACTION
 #line 42 "mycc.l"
-{ return RA; }
+{ return install_fp(); }
             YY_BREAK
-          case 15: // rule at line 43: (?:\Q||\E)
+          case 10: // rule at line 43: (?:"(?:\\"|\\\n|[^"])*")
             YY_USER_ACTION
 #line 43 "mycc.l"
-{ return OR; }
+{ return install_str(); }
             YY_BREAK
-          case 16: // rule at line 44: (?:\Q&&\E)
+          case 11: // rule at line 44: (?:\Q+=\E)
             YY_USER_ACTION
 #line 44 "mycc.l"
-{ return AN; }
+{ return PA; }
             YY_BREAK
-          case 17: // rule at line 45: (?:\Q==\E)
+          case 12: // rule at line 45: (?:\Q-=\E)
             YY_USER_ACTION
 #line 45 "mycc.l"
-{ return EQ; }
+{ return NA; }
             YY_BREAK
-          case 18: // rule at line 46: (?:\Q!=\E)
+          case 13: // rule at line 46: (?:\Q*=\E)
             YY_USER_ACTION
 #line 46 "mycc.l"
-{ return NE; }
+{ return TA; }
             YY_BREAK
-          case 19: // rule at line 47: (?:\Q<=\E)
+          case 14: // rule at line 47: (?:\Q/=\E)
             YY_USER_ACTION
 #line 47 "mycc.l"
-{ return LE; }
+{ return DA; }
             YY_BREAK
-          case 20: // rule at line 48: (?:\Q>=\E)
+          case 15: // rule at line 48: (?:\Q%=\E)
             YY_USER_ACTION
 #line 48 "mycc.l"
-{ return GE; }
+{ return MA; }
             YY_BREAK
-          case 21: // rule at line 49: (?:\Q<<\E)
+          case 16: // rule at line 49: (?:\Q&=\E)
             YY_USER_ACTION
 #line 49 "mycc.l"
-{ return LS; }
+{ return AA; }
             YY_BREAK
-          case 22: // rule at line 50: (?:\Q>>\E)
+          case 17: // rule at line 50: (?:\Q^=\E)
             YY_USER_ACTION
 #line 50 "mycc.l"
-{ return RS; }
+{ return XA; }
             YY_BREAK
-          case 23: // rule at line 51: (?:\Q++\E)
+          case 18: // rule at line 51: (?:\Q|=\E)
             YY_USER_ACTION
 #line 51 "mycc.l"
-{ return PP; }
+{ return OA; }
             YY_BREAK
-          case 24: // rule at line 52: (?:\Q--\E)
+          case 19: // rule at line 52: (?:\Q<<=\E)
             YY_USER_ACTION
 #line 52 "mycc.l"
-{ return NN; }
+{ return LA; }
             YY_BREAK
-          case 25: // rule at line 53: (?:\Q->\E)
+          case 20: // rule at line 53: (?:\Q>>=\E)
             YY_USER_ACTION
 #line 53 "mycc.l"
-{ return AR; }
+{ return RA; }
             YY_BREAK
-          case 26: // rule at line 54: (?:\Q<%\E)
+          case 21: // rule at line 54: (?:\Q||\E)
             YY_USER_ACTION
 #line 54 "mycc.l"
-{ return '{'; }
+{ return OR; }
             YY_BREAK
-          case 27: // rule at line 55: (?:\Q%>\E)
+          case 22: // rule at line 55: (?:\Q&&\E)
             YY_USER_ACTION
 #line 55 "mycc.l"
-{ return '}'; }
+{ return AN; }
             YY_BREAK
-          case 28: // rule at line 56: (?:\Q<:\E)
+          case 23: // rule at line 56: (?:\Q==\E)
             YY_USER_ACTION
 #line 56 "mycc.l"
-{ return '['; }
+{ return EQ; }
             YY_BREAK
-          case 29: // rule at line 57: (?:\Q:>\E)
+          case 24: // rule at line 57: (?:\Q!=\E)
             YY_USER_ACTION
 #line 57 "mycc.l"
-{ return ']'; }
+{ return NE; }
             YY_BREAK
-          case 30: // rule at line 58: [!$-&(-/:-?\x5b\x5d\x5e{-~]
+          case 25: // rule at line 58: (?:\Q<=\E)
             YY_USER_ACTION
 #line 58 "mycc.l"
-{ return yytext[0]; }
+{ return LE; }
             YY_BREAK
-          case 31: // rule at line 59: .
+          case 26: // rule at line 59: (?:\Q>=\E)
             YY_USER_ACTION
 #line 59 "mycc.l"
+{ return GE; }
+            YY_BREAK
+          case 27: // rule at line 60: (?:\Q<<\E)
+            YY_USER_ACTION
+#line 60 "mycc.l"
+{ return LS; }
+            YY_BREAK
+          case 28: // rule at line 61: (?:\Q>>\E)
+            YY_USER_ACTION
+#line 61 "mycc.l"
+{ return RS; }
+            YY_BREAK
+          case 29: // rule at line 62: (?:\Q++\E)
+            YY_USER_ACTION
+#line 62 "mycc.l"
+{ return PP; }
+            YY_BREAK
+          case 30: // rule at line 63: (?:\Q--\E)
+            YY_USER_ACTION
+#line 63 "mycc.l"
+{ return NN; }
+            YY_BREAK
+          case 31: // rule at line 64: (?:\Q->\E)
+            YY_USER_ACTION
+#line 64 "mycc.l"
+{ return AR; }
+            YY_BREAK
+          case 32: // rule at line 65: (?:\Q<%\E)
+            YY_USER_ACTION
+#line 65 "mycc.l"
+{ return '{'; }
+            YY_BREAK
+          case 33: // rule at line 66: (?:\Q%>\E)
+            YY_USER_ACTION
+#line 66 "mycc.l"
+{ return '}'; }
+            YY_BREAK
+          case 34: // rule at line 67: (?:\Q<:\E)
+            YY_USER_ACTION
+#line 67 "mycc.l"
+{ return '['; }
+            YY_BREAK
+          case 35: // rule at line 68: (?:\Q:>\E)
+            YY_USER_ACTION
+#line 68 "mycc.l"
+{ return ']'; }
+            YY_BREAK
+          case 36: // rule at line 69: [!$-&(-/:-?\x5b\x5d\x5e{-~]
+            YY_USER_ACTION
+#line 69 "mycc.l"
+{ return yytext[0]; }
+            YY_BREAK
+          case 37: // rule at line 70: .
+            YY_USER_ACTION
+#line 70 "mycc.l"
 { yyerror("Unknown character ignored"); }
 
             YY_BREAK
@@ -320,9 +349,9 @@ int yyFlexLexer::yylex()
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-#line 62 "mycc.l"
+#line 73 "mycc.l"
 
-/* install_id - add identifier to symbol table if not already there and assign it a JVM local var index */
+/* install_id - add identifier to symbol table if not already there */
 static int install_id()
 {
 	yylval.sym = lookup(yytext);
@@ -336,7 +365,7 @@ static int install_id()
 	return yylval.sym->token;
 }
 
-/* install_int - convert decimal yytext[] to yylval.num and return INT8, INT16, or INT32 */
+/* install_int - convert decimal yytext[] to INT8, INT16, or INT32 */
 static int install_int()
 {
 	sscanf(yytext, "%u", &yylval.num);
@@ -350,12 +379,12 @@ static int install_int()
 	return INT32;
 }
 
-/* install_oct - convert octal yytext[] to yylval.num and return INT8, INT16, or INT32 */
+/* install_oct - convert octal yytext[] to INT8, INT16, or INT32 */
 static int install_oct()
 {
 	sscanf(yytext, "%o", &yylval.num);
 
-	if (yylval.num < 128)
+  	if (yylval.num < 128)
 		return INT8;
 
 	if (yylval.num < 32368)
@@ -364,7 +393,7 @@ static int install_oct()
 	return INT32;
 }
 
-/* install_hex - convert hexadecimal yytext[] to yylval.num and return INT8, INT16, or INT32 */
+/* install_hex - convert hexadecimal yytext[] to INT8, INT16, or INT32 */
 static int install_hex()
 {
 	sscanf(yytext, "%x", &yylval.num);
@@ -378,10 +407,35 @@ static int install_hex()
 	return INT32;
 }
 
-/* install_chr - convert ASCII character yytext[1] to yylval.num and return INT8 */
+/* install_chr - convert ASCII character yytext[1] to INT8 */
 static int install_chr()
 {
-	/* TODO: TO BE COMPLETED */
+	char c;
+
+	sscanf(yytext + 1, "%c", &c);
+	yylval.num = (int)c;
 
 	return INT8;
+}
+
+/* install_fp - convert float yytext[] into float FLT */
+static int install_fp()
+{
+	sscanf(yytext, "%g", &yylval.flt);
+
+	return FLT;
+}
+
+/* install_str - duplicate yytext[] string without the quotes */
+static int install_str()
+{
+	yylval.str = (char*)malloc(yyleng - 1);
+
+	if (yylval.str)
+	{
+		strcpy(yylval.str, yytext + 1);
+		yylval.str[yyleng - 2] = '\0';
+	}
+
+	return STR;
 }

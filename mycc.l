@@ -1,35 +1,46 @@
-/* TODO: TO BE COMPLETED */
+/* TO BE COMPLETED */
 
 %option noyywrap
 %option yylineno
 %option nounistd
 
 %{
-
 #include "global.h"
 #include "mycc.h"
 
-static int localvar = 3;	/* JVM first local var index */
+static int localvar = 3;
 
 static int install_id();
 static int install_int();
 static int install_oct();
 static int install_hex();
 static int install_chr();
-
+static int install_fp();
+static int install_str();
 %}
 
 digit           [0-9]
 alpha           [a-zA-Z_]
 id              {alpha}({alpha}|{digit})*
 int             {digit}+
-
+oct             0[0-7]+
+hex             0[xX][0-9a-fA-F]+
+chr             '(\\'|[^'\n])*'
+fp              {int}(\.{int}([Ee][+-]?{int})?|(\.{int})?[Ee][+-]?{int})
+str             \"(\\\"|\\\n|[^"])*\"
+EndLine 		 [\r\n]  
 %%
 
 [ \t\v\n\f\r]                  /* skip white space */
-return                         { return RETURN; }
+"//".*{EndLine}+      			  
+"/*".*."*/"                    {}      /* TO BE COMPLETED: ignore inline and multiline comments */
 {id}                           { return install_id(); }
+{oct}                          { return install_oct(); }
+{hex}                          { return install_hex(); }
 {int}                          { return install_int(); }
+{chr}                          { return install_chr(); }
+{fp}                           { return install_fp(); }
+{str}                          { return install_str(); }
 "+="                           { return PA; }
 "-="                           { return NA; }
 "*="                           { return TA; }
@@ -60,7 +71,7 @@ return                         { return RETURN; }
 
 %%
 
-/* install_id - add identifier to symbol table if not already there and assign it a JVM local var index */
+/* install_id - add identifier to symbol table if not already there */
 static int install_id()
 {
 	yylval.sym = lookup(yytext);
@@ -74,7 +85,7 @@ static int install_id()
 	return yylval.sym->token;
 }
 
-/* install_int - convert decimal yytext[] to yylval.num and return INT8, INT16, or INT32 */
+/* install_int - convert decimal yytext[] to INT8, INT16, or INT32 */
 static int install_int()
 {
 	sscanf(yytext, "%u", &yylval.num);
@@ -88,12 +99,12 @@ static int install_int()
 	return INT32;
 }
 
-/* install_oct - convert octal yytext[] to yylval.num and return INT8, INT16, or INT32 */
+/* install_oct - convert octal yytext[] to INT8, INT16, or INT32 */
 static int install_oct()
 {
 	sscanf(yytext, "%o", &yylval.num);
 
-	if (yylval.num < 128)
+  	if (yylval.num < 128)
 		return INT8;
 
 	if (yylval.num < 32368)
@@ -102,7 +113,7 @@ static int install_oct()
 	return INT32;
 }
 
-/* install_hex - convert hexadecimal yytext[] to yylval.num and return INT8, INT16, or INT32 */
+/* install_hex - convert hexadecimal yytext[] to INT8, INT16, or INT32 */
 static int install_hex()
 {
 	sscanf(yytext, "%x", &yylval.num);
@@ -116,10 +127,35 @@ static int install_hex()
 	return INT32;
 }
 
-/* install_chr - convert ASCII character yytext[1] to yylval.num and return INT8 */
+/* install_chr - convert ASCII character yytext[1] to INT8 */
 static int install_chr()
 {
-	/* TODO: TO BE COMPLETED */
+	char c;
+
+	sscanf(yytext + 1, "%c", &c);
+	yylval.num = (int)c;
 
 	return INT8;
+}
+
+/* install_fp - convert float yytext[] into float FLT */
+static int install_fp()
+{
+	sscanf(yytext, "%g", &yylval.flt);
+
+	return FLT;
+}
+
+/* install_str - duplicate yytext[] string without the quotes */
+static int install_str()
+{
+	yylval.str = (char*)malloc(yyleng - 1);
+
+	if (yylval.str)
+	{
+		strcpy(yylval.str, yytext + 1);
+		yylval.str[yyleng - 2] = '\0';
+	}
+
+	return STR;
 }

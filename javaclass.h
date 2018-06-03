@@ -4,7 +4,7 @@
  *  Java ClassFile struct
  *  
  *
- *  Created by Robert van Engelen on 1/2/05.
+ *  Created by Robert van Engelen on 1/2/05, updated 11/22/13.
  *  Copyright 2005 Robert van Engelen. All rights reserved.
  *
  */
@@ -124,6 +124,7 @@ int save_classFile(struct ClassFile *cf);
 int constant_pool_add_Utf8(struct ClassFile *cf, const char *name);
 int constant_pool_add_Integer(struct ClassFile *cf, u4 i);
 int constant_pool_add_Float(struct ClassFile *cf, float f);
+int constant_pool_add_String(struct ClassFile *cf, u2 i);
 int constant_pool_add_Class(struct ClassFile *cf, const char *name);
 int constant_pool_add_Fieldref(struct ClassFile *cf, const char *class_name, const char *field_name, const char *descriptor);
 int constant_pool_add_Methodref(struct ClassFile *cf, const char *class_name, const char *method_name, const char *descriptor);
